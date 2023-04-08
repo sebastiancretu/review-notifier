@@ -18,6 +18,7 @@
   "author": "Sebastian Cretu",
   "license": "ISC",
   "devDependencies": {
+    "@aws-sdk/types": "^3.306.0",
     "@commitlint/cli": "^17.5.1",
     "@commitlint/config-conventional": "^17.4.4",
     "@semantic-release/changelog": "^6.0.3",
@@ -42,6 +43,9 @@
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "@actions/github": "^5.1.1"
+    "@actions/github": "^5.1.1",
+    "@aws-sdk/client-s3": "^3.309.0",
+    "@slack/web-api": "^6.8.1",
+    "slackify-markdown": "^4.3.1"
   }
 }
