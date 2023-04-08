@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   review-dependabot-pr:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     steps:
       - name: Dependabot metadata
