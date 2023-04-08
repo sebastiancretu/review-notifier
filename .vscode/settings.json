@@ -1,0 +1,19 @@
+{
+	"editor.formatOnPaste": true,
+	"editor.formatOnSave": true,
+	"editor.formatOnType": true,
+	"editor.wordWrap": "wordWrapColumn",
+	"editor.wordWrapColumn": 160,
+	"workbench.tree.indent": 25,
+	"workbench.tree.renderIndentGuides": "always",
+	"eslint.alwaysShowStatus": true,
+	"workbench.editor.highlightModifiedTabs": true,
+	"editor.mouseWheelZoom": true,
+	"window.title": "${activeEditorMedium}${separator}${rootName}",
+	"search.exclude": {
+		"*package*.json": true, // Exlude all json files in the root
+		"**/node_modules": true,
+		"dist/**": true // Don't search the TypeScript "bin" folder
+	},
+	"typescript.referencesCodeLens.enabled": true,
+}
