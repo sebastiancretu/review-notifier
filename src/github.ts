@@ -1,6 +1,7 @@
 import core from '@actions/core';
 import github from '@actions/github';
 import slackifyMarkdown from 'slackify-markdown';
+import { trimToWords } from './utils/string';
 
 interface Inputs {
   readonly ignoreDraft: boolean;
@@ -11,9 +12,11 @@ interface Inputs {
   readonly slackBotToken: string;
   readonly slackChannelId: string;
   readonly githubToken: string;
+
+  readonly numOfWords: string | number;
 }
 
-interface PullRequest {
+export interface PullRequest {
   readonly author: string;
   readonly title: string;
   readonly body: string;
@@ -71,6 +74,10 @@ class GithubSingleton {
       githubToken: core.getInput('github-token', {
         required: true,
       }),
+      numOfWords:
+        core.getInput('slack-message-max-words-count', {
+          required: false,
+        }) ?? 250,
     };
   }
 
@@ -78,7 +85,11 @@ class GithubSingleton {
     return {
       author: this.pullRequest.user?.login,
       title: this.pullRequest.title,
-      body: slackifyMarkdown(this.pullRequest?.body) ?? '',
+      body:
+        trimToWords(
+          slackifyMarkdown(this.pullRequest?.body),
+          Number(this.getInputs().numOfWords)
+        ) ?? '',
       href: this.pullRequest?.html_url,
       number: Number(this.pullRequest?.number),
       owner: this.repository.owner.login,

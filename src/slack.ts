@@ -1,10 +1,10 @@
 import { WebClient } from '@slack/web-api';
 
-import GithubSingleton from './github';
+import GithubSingleton, { PullRequest } from './github';
 
 const slackClient = new WebClient(GithubSingleton.getInputs().slackBotToken);
 
-export const slackClearReactions = async (
+export const clearReactions = async (
   slackMessageId: string,
   channelId: string
 ) => {
@@ -34,7 +34,7 @@ export const slackClearReactions = async (
   }
 };
 
-export const slackThreadComment = async ({ ts, text }) => {
+export const threadComment = async ({ ts, text }) => {
   const message = await slackClient.chat.postMessage({
     channel: GithubSingleton.getInputs().slackChannelId,
     thread_ts: ts,
@@ -52,5 +52,48 @@ export const slackThreadComment = async ({ ts, text }) => {
 
   if (!message.ok || !message.ts) {
     throw Error('Failed to post message to thread requesting re-review');
+  }
+};
+
+export const newPullRequestMessage = async () => {
+  const pullRequest = GithubSingleton.getPullRequest();
+  const message = await slackClient.chat.postMessage({
+    channel: GithubSingleton.getInputs().slackChannelId,
+    blocks: [
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `Hi ${pullRequest.reviewers} :wave:`,
+        },
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*<${pullRequest.href}|${pullRequest.title}>* pull request was just published and needs yor review.`,
+        },
+      },
+      {
+        type: 'context',
+        elements: [
+          {
+            type: 'mrkdwn',
+            text: pullRequest.body,
+          },
+        ],
+      },
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: 'Please take some time to review the changes and provide your feedback. Your insights and suggestions are greatly appreciated.',
+        },
+      },
+    ],
+  });
+
+  if (!message.ok || !message.ts) {
+    throw Error('Failed to post message to slack.');
   }
 };
