@@ -33,8 +33,8 @@ export interface PullRequest {
   readonly eventName: string;
 }
 
-class GithubSingleton {
-  private static instance: GithubSingleton;
+class PullRequestData {
+  private static instance: PullRequestData;
   private readonly pullRequest;
   private readonly repository;
   private readonly context;
@@ -45,11 +45,11 @@ class GithubSingleton {
     this.pullRequest = this.repository.pull_request || {};
   }
 
-  static getInstance(): GithubSingleton {
-    if (!GithubSingleton.instance) {
-      GithubSingleton.instance = new GithubSingleton();
+  static getInstance(): PullRequestData {
+    if (!PullRequestData.instance) {
+      PullRequestData.instance = new PullRequestData();
     }
-    return GithubSingleton.instance;
+    return PullRequestData.instance;
   }
 
   public getInputs(): Inputs {
@@ -111,4 +111,4 @@ class GithubSingleton {
   }
 }
 
-export default GithubSingleton.getInstance();
+export default PullRequestData.getInstance();
