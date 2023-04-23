@@ -7,7 +7,7 @@
     "prepare": "husky install",
     "start": "npx ts-node --transpile-only src/index.ts",
     "build": "tsc",
-    "package": "ncc build --source-map --license licenses.txt",
+    "package": "tsc && ncc build --source-map --license licenses.txt",
     "lint": "eslint ./src --ext .ts --ext .js",
     "lint:fix": "eslint ./src  --ext .ts --ext .js --fix",
     "test:unit": "jest --coverage --passWithNoTests",

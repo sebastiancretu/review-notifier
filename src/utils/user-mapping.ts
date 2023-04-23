@@ -1,7 +1,8 @@
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 
-interface GithubSlackMapping {
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+
+export interface GithubSlackMapping {
   github_username: string;
   slack_id: string;
 }
