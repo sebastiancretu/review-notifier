@@ -28,8 +28,11 @@ class GithubService {
   private static instance: GithubService;
   private pullRequest: PullRequest | null = null;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private slackMessageId: string | undefined;
+
+  private constructor() {
+    this.getPullRequest().then(() => this.extractSlackTs());
+  }
 
   static getInstance(): GithubService {
     if (!GithubService.instance) {
@@ -41,6 +44,10 @@ class GithubService {
   async extractSlackTs(): Promise<string | undefined> {
     if (!this.pullRequest) {
       throw Error('No pull_request');
+    }
+
+    if (this.slackMessageId) {
+      return this.slackMessageId;
     }
 
     const comments = await Client.getOctokit().rest.issues.listComments({
@@ -55,7 +62,9 @@ class GithubService {
       )
       .find((match) => match)?.[0];
 
-    return slackTs;
+    this.slackMessageId = slackTs;
+
+    return this.slackMessageId;
   }
 
   async addSlackTsComment(ts: string) {

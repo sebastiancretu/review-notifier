@@ -5,8 +5,10 @@ import GithubService from './github-service';
 import { SlackMessage } from './slack-message';
 import { createUsersToString } from './utils/user-mapping';
 
-// will only run on push to base branch (i.e. staging), so we can assume that a closed state for PR
-// equates to 'merged' (no specific event for 'merged' on PRs)
+const reactionMap = {
+  approved: 'white_check_mark',
+  changes_requested: 'octagonal_sign',
+};
 
 export const onMerge = async (): Promise<void> => {
   try {
@@ -18,7 +20,7 @@ export const onMerge = async (): Promise<void> => {
 
     const slackMessageId = await GithubService.extractSlackTs();
 
-    await SlackMessage.clearReactions(slackMessageId);
+    await SlackMessage.clearReactions();
 
     await Client.getSlackClient().reactions.add({
       channel: Client.getInputs().slackChannelId,
@@ -27,7 +29,6 @@ export const onMerge = async (): Promise<void> => {
     });
 
     await SlackMessage.addComment({
-      ts: slackMessageId,
       text: 'This **Pull Request** has been merged.',
     });
 
@@ -47,7 +48,7 @@ export const onPush = async (): Promise<void> => {
     }
     const slackMessageId = await GithubService.extractSlackTs();
 
-    await SlackMessage.clearReactions(slackMessageId);
+    await SlackMessage.clearReactions();
 
     if (pullRequest.state === 'closed' || !pullRequest.reviewersCount) {
       return;
@@ -70,7 +71,6 @@ export const onPush = async (): Promise<void> => {
       });
 
       await SlackMessage.addComment({
-        ts: slackMessageId,
         text: `${usersToAtString} new code has been pushed to the <${pullRequest.href}|Pull Request ${pullRequest.number}> since your last review. It would be great if you could take a look at the latest changes and provide your feedback. Thank you!`,
       });
     }
@@ -85,29 +85,20 @@ export const onPush = async (): Promise<void> => {
 export const onPullRequestReview = async (): Promise<void> => {
   try {
     const { action, review } = context.payload;
-    const pullRequest = await GithubService.getPullRequest();
 
-    // TODO handle more than just submitted PRs
-    if (action !== 'submitted') {
+    if (action && !['submitted', 'edited'].includes(action)) {
       return;
     }
+
+    const pullRequest = await GithubService.getPullRequest();
 
     if (!pullRequest) {
       throw Error('No pullRequest found');
     }
 
-    const slackMessageId = await GithubService.extractSlackTs();
-
-    //
-    // ─── MAP USERS ───────────────────────────────────────────────────
-    //
-
-    const [reviewer] = pullRequest.usersMapping.filter((user) => {
-      return user.github_username === review.user.login;
-    });
-    const [author] = pullRequest.usersMapping.filter((user) => {
-      return user.github_username === pullRequest.author;
-    });
+    const reviewer = pullRequest.usersMapping.find(
+      (user) => user.github_username === review.user.login
+    );
 
     if (!reviewer) {
       throw Error(
@@ -115,89 +106,45 @@ export const onPullRequestReview = async (): Promise<void> => {
       );
     }
 
+    const author = pullRequest.usersMapping.find(
+      (user) => user.github_username === pullRequest.author
+    );
+
     if (!author) {
       throw Error(
         `Could not map ${pullRequest.author} to the users you provided in action.yml`
       );
     }
 
-    //
-    // ─── BUILD MESSAGE ───────────────────────────────────────────────
-    //
+    const slackMessageId = await GithubService.extractSlackTs();
+    const formattedText = `<@${author.slack_id}>, *${reviewer.github_username}*`;
 
-    const userText = `<@${author.slack_id}>, *${reviewer.github_username}*`;
-    let actionText: string = '';
-    let reactionToAdd: string = '';
-
-    switch (review.state) {
-      case 'changes_requested':
-        actionText = 'would like you to change some things in the code';
-        reactionToAdd = reactionMap['changes_requested'];
-        break;
-      // TODO see if getting the review could allow for posting the text that was commented
-      // NOTE for reviews where the state is "commented", the comment text is not in the event payload
-      case 'commented':
-        actionText = 'neither approved or denied your PR, but merely commented';
-        reactionToAdd = reactionMap['commented'];
-        break;
-      case 'approved':
-        actionText = 'approved your PR';
-        reactionToAdd = reactionMap['approved'];
-        break;
-    }
-    if (!!review.body) {
-      actionText = `${actionText}\n>${review.body}`;
-    }
-    const text = `${userText} ${actionText}`;
-    // post corresponding message
-    await slackWebClient.chat.postMessage({
-      channel: channelId,
-      thread_ts: slackMessageId,
-      text,
-      blocks: [
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text,
-          },
-        },
-      ],
-    });
-
-    //
-    // ─── ADD REACTION TO MAIN THREAD ─────────────────────────────────
-    //
-
-    // get existing reactions on message
-    const existingReactionsRes = await slackWebClient.reactions.get({
-      channel: channelId,
+    const existingReactionsRes = await Client.getSlackClient().reactions.get({
+      channel: Client.getInputs().slackChannelId,
       timestamp: slackMessageId,
     });
 
-    let hasReaction = false;
-    if (existingReactionsRes?.message?.reactions) {
-      // return out if the reaction we would add is already present (since we cant have the bot react on behalf of a user)
-      existingReactionsRes.message.reactions.forEach((reaction) => {
-        if (reaction.name === reactionToAdd) {
-          hasReaction = true;
-        }
+    const hasReaction = existingReactionsRes?.message?.reactions?.some(
+      (reaction) => reaction.name === reactionMap[review.state]
+    );
+
+    if (!hasReaction) {
+      await Client.getSlackClient().reactions.add({
+        channel: Client.getInputs().slackChannelId,
+        timestamp: slackMessageId,
+        name: reactionMap[review.state],
       });
     }
 
-    if (hasReaction) {
-      logger.info('END handlePullRequestReview: hasReaction');
-      return;
-    }
+    const slackMessageText =
+      review.state === 'changes_requested'
+        ? `${formattedText} has **requested changes**. Please review.`
+        : `${formattedText} **approved** your Pull Request.`;
 
-    // add new reactions
-    await slackWebClient.reactions.add({
-      channel: channelId,
-      timestamp: slackMessageId,
-      name: reactionToAdd,
+    await SlackMessage.addComment({
+      text: slackMessageText,
     });
 
-    logger.info('END handlePullRequestReview: new reactions added');
     return;
   } catch (error) {
     fail(error);

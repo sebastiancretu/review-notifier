@@ -1,11 +1,12 @@
 import Client from './client';
+import GithubService from './github-service';
 
 export class SlackMessage {
-  public static async clearReactions(slackMessageId: string | undefined) {
+  public static async clearReactions() {
+    const slackMessageId = await GithubService.extractSlackTs();
     if (!slackMessageId) {
       return;
     }
-
     try {
       const existingReactions = await Client.getSlackClient().reactions.get({
         channel: Client.getInputs().slackChannelId,
@@ -32,10 +33,11 @@ export class SlackMessage {
     }
   }
 
-  public static async addComment({ ts, text }) {
+  public static async addComment({ text }) {
+    const slackMessageId = await GithubService.extractSlackTs();
     const message = await Client.getSlackClient().chat.postMessage({
       channel: Client.getInputs().slackChannelId,
-      thread_ts: ts,
+      thread_ts: slackMessageId,
       text,
       blocks: [
         {
@@ -49,19 +51,15 @@ export class SlackMessage {
     });
 
     if (!message.ok || !message.ts) {
-      throw Error('Failed to post message to thread requesting re-review');
+      throw Error('Failed to post message to thread');
     }
   }
 
-  public static async newPullRequest({
-    channelId,
-    reviewers,
-    href,
-    title,
-    body,
-  }) {
+  public static async newPullRequest() {
+    const { reviewers, href, title, body } =
+      await GithubService.getPullRequest();
     const message = await Client.getSlackClient().chat.postMessage({
-      channel: channelId,
+      channel: Client.getInputs().slackChannelId,
       blocks: [
         {
           type: 'section',
@@ -99,5 +97,7 @@ export class SlackMessage {
     if (!message.ok || !message.ts) {
       throw Error('Failed to post message to slack.');
     }
+
+    return message.ts;
   }
 }
