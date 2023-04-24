@@ -60,6 +60,7 @@ const onPush = async () => {
 exports.onPush = onPush;
 const onPullRequestReview = async () => {
     const { action, review } = github_1.context.payload;
+    console.log(JSON.stringify(github_1.context.payload));
     if ((action && !['submitted', 'edited'].includes(action)) ||
         !reactionMap[review.state]) {
         return;

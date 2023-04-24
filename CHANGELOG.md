@@ -1,3 +1,10 @@
+## [1.0.12](https://github.com/sebastiancretu/review-notifier/compare/v1.0.11...v1.0.12) (2023-04-24)
+
+
+### Bug Fixes
+
+* debug code ([95c6ad8](https://github.com/sebastiancretu/review-notifier/commit/95c6ad89cc4548c846b045834c3c7e581e281b7b))
+
 ## [1.0.11](https://github.com/sebastiancretu/review-notifier/compare/v1.0.10...v1.0.11) (2023-04-24)
 
 
