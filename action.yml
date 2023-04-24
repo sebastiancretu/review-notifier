@@ -5,6 +5,7 @@ inputs:
   ignore-draft: 
     required: true
     description: "A boolean value that determines whether Review Notifier should ignore draft pull requests"
+    default: "false"
   aws-region:
     required: true
     description: "The region where the AWS S3 bucket is located"
