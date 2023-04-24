@@ -1,5 +1,6 @@
 import Client from './client';
 import GithubService from './github-service';
+import { createUsersToString } from './utils/user-mapping';
 
 export class SlackMessage {
   public static async clearReactions() {
@@ -58,8 +59,12 @@ export class SlackMessage {
   }
 
   public static async newPullRequest() {
-    const { reviewers, href, title, body } =
+    const { reviewers, href, title, body, usersMapping } =
       await GithubService.getPullRequest();
+    const slackReviewers = createUsersToString({
+      users: reviewers,
+      s3UsersMapping: usersMapping,
+    });
     const message = await Client.getSlackClient().chat.postMessage({
       channel: Client.getInputs().slackChannelId,
       blocks: [
@@ -67,7 +72,7 @@ export class SlackMessage {
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: `Hi ${reviewers} :wave:`,
+            text: `Hi ${slackReviewers} :wave:`,
           },
         },
         {
@@ -82,7 +87,7 @@ export class SlackMessage {
           elements: [
             {
               type: 'mrkdwn',
-              text: body,
+              text: `> ${body}`,
             },
           ],
         },
