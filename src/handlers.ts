@@ -70,7 +70,7 @@ export const onPush = async (): Promise<void> => {
 
 export const onPullRequestReview = async (): Promise<void> => {
   const { action, review } = context.payload;
-  console.log(JSON.stringify(context.payload));
+
   if (
     (action && !['submitted', 'edited'].includes(action)) ||
     !reactionMap[review.state]
