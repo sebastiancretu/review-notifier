@@ -46,7 +46,6 @@ export const onPush = async (): Promise<void> => {
     if (pullRequest.state === 'closed' || !pullRequest.reviewersCount) {
       return;
     }
-    const slackMessageId = await GithubService.extractSlackTs();
 
     await SlackMessage.clearReactions();
 
@@ -62,11 +61,12 @@ export const onPush = async (): Promise<void> => {
 
     if (reviews.data) {
       const previousReviewers = reviews.data.map(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         (review) => review!.user!.login
       );
-      const distinctPreviousReviewers = [...new Set(previousReviewers)];
+
       const usersToAtString = await createUsersToString({
-        users: distinctPreviousReviewers,
+        users: [...new Set(previousReviewers)],
         s3UsersMapping: pullRequest.usersMapping,
       });
 

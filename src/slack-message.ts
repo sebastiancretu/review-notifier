@@ -18,11 +18,13 @@ export class SlackMessage {
         existingReactions.message?.reactions
       ) {
         for (const reaction of existingReactions.message.reactions) {
-          await Client.getSlackClient().reactions.remove({
-            channel: Client.getInputs().slackChannelId,
-            timestamp: slackMessageId,
-            name: reaction.name!,
-          });
+          if (reaction.name) {
+            await Client.getSlackClient().reactions.remove({
+              channel: Client.getInputs().slackChannelId,
+              timestamp: slackMessageId,
+              name: reaction.name,
+            });
+          }
         }
       }
 
