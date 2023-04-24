@@ -76411,7 +76411,7 @@ const handlers_1 = __nccwpck_require__(44770);
 const slack_message_1 = __nccwpck_require__(30251);
 async function run() {
     const { eventName } = github_1.context;
-    console.log(JSON.stringify(github_1.context.payload));
+    console.log(JSON.stringify(github_1.context));
     const pullRequest = await github_service_1.default.getPullRequest();
     const slackMessageId = await github_service_1.default.extractSlackTs();
     const ignoreDraft = client_1.default.getInputs().ignoreDraft;
