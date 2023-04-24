@@ -128,7 +128,7 @@ class GithubService {
         ? 'merged'
         : pullRequest.draft
         ? 'draft'
-        : context.payload.event.action,
+        : pullRequest.action,
       state: pullRequest.state,
       ref: context.ref,
       eventName: context.eventName,

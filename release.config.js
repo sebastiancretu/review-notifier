@@ -1,11 +1,5 @@
 module.exports = {
-  branches: [
-    'main',
-    {
-      name: 'beta',
-      prerelease: true,
-    },
-  ],
+  branches: ['main'],
   repositoryUrl: 'https://github.com/sebastiancretu/review-notifier',
   plugins: [
     [
