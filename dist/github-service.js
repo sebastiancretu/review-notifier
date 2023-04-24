@@ -28,7 +28,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const github_1 = require("@actions/github");
-const slackify_markdown_1 = __importDefault(require("slackify-markdown"));
 const client_1 = __importDefault(require("./client"));
 const string_1 = require("./utils/string");
 const user_mapping_1 = require("./utils/user-mapping");
@@ -101,7 +100,7 @@ class GithubService {
         this.pullRequest = {
             author: pullRequest.user?.login ?? 'unknown',
             title: pullRequest.title,
-            body: (0, string_1.trimToWords)((0, slackify_markdown_1.default)(pullRequest.body ?? ''), Number(client_1.default.getInputs().maxBodyWordCount)),
+            body: (0, string_1.trimToWords)((0, string_1.markdownToSlack)(pullRequest.body ?? ''), Number(client_1.default.getInputs().maxBodyWordCount)),
             href: pullRequest?.html_url,
             number: Number(pullRequest?.number),
             owner: github_1.context.repo.owner,

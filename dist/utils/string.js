@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trimToWords = void 0;
+exports.markdownToSlack = exports.trimToWords = void 0;
 const trimToWords = (text, numWords, ellipsis = '...') => {
     const words = text.split(/\s+/);
     const trimmedWords = words.slice(0, numWords);
@@ -13,3 +13,30 @@ const trimToWords = (text, numWords, ellipsis = '...') => {
     }
 };
 exports.trimToWords = trimToWords;
+const markdownToSlack = (markdown) => {
+    // Replace two or more consecutive spaces or tabs with a newline character
+    markdown = markdown.replace(/(\r\n|\r|\n)/g, '\n');
+    // Bold
+    markdown = markdown.replace(/\*\*(.*?)\*\*/g, '_$1_');
+    // Italics
+    markdown = markdown.replace(/\*(.*?)\*/g, '*$1*');
+    // Strikethrough
+    markdown = markdown.replace(/~~(.*?)~~/g, '~$1~');
+    // Code blocks
+    markdown = markdown.replace(/```(.*?)```/gs, '```\n$1\n```');
+    // Inline code
+    markdown = markdown.replace(/`([^`]+)`/g, '`$1`');
+    // Links
+    markdown = markdown.replace(/\[(.*?)\]\((.*?)\)/g, '<$2|$1>');
+    // Headers
+    markdown = markdown.replace(/^(#+)\s*(.*?)\s*$/gm, (_, level, content) => {
+        return `\n*${content}*\n`;
+    });
+    // Lists
+    markdown = markdown.replace(/^\s*([-*+])\s(.+)/gm, (_, bullet, content) => {
+        const slackBullet = bullet === '-' ? '- ' : `${bullet} `;
+        return `${slackBullet}${content}\n`;
+    });
+    return markdown.trim();
+};
+exports.markdownToSlack = markdownToSlack;

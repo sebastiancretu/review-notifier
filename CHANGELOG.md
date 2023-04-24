@@ -1,3 +1,11 @@
+## [1.0.4](https://github.com/sebastiancretu/review-notifier/compare/v1.0.3...v1.0.4) (2023-04-24)
+
+
+### Bug Fixes
+
+* markdown ([dc87238](https://github.com/sebastiancretu/review-notifier/commit/dc87238e49e9d4c194597611f3b70f6ef83fa126))
+* markdown ([c66b96e](https://github.com/sebastiancretu/review-notifier/commit/c66b96e7c345f87ed28ece15d7c188a04b1c1241))
+
 ## [1.0.3](https://github.com/sebastiancretu/review-notifier/compare/v1.0.2...v1.0.3) (2023-04-24)
 
 
