@@ -24,10 +24,10 @@ inputs:
   github-token:
     required: true
     description: 'The authentication token for the GitHub repository that Review Notifier will monitor.'
-  slack-message-max-words-count:
+  extract-body-summary:
     required: false
-    description: 'An optional input that specifies the maximum number of words allowed in the message body of the Slack notification. If not specified, Review Notifier will use the default value'
-    default: "250"
+    description: 'An optional input that specifies if should extract the summary of a markdown string. Will extract everything until the first heading.'
+    default: "false"
   ignore-labels:
     required: false
     description: 'A comma-separated list of PR labels that Review Notifier should ignore'

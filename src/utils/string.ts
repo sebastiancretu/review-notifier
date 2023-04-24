@@ -1,16 +1,9 @@
-export const trimToWords = (
-  text: string,
-  numWords: number,
-  ellipsis = '...'
-): string => {
-  const words = text.split(/\s+/);
-  const trimmedWords = words.slice(0, numWords);
-  const trimmedText = trimmedWords.join(' ');
-
-  if (words.length > numWords) {
-    return trimmedText.trim() + ellipsis;
+export const extractSummaryFromMarkdown = (markdown: string): string => {
+  const headingIndex = markdown.search(/^#+\s/m);
+  if (headingIndex !== -1) {
+    return markdown.substring(0, headingIndex);
   } else {
-    return trimmedText.trim();
+    return markdown;
   }
 };
 

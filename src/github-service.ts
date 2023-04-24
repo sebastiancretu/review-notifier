@@ -2,7 +2,7 @@ import * as core from '@actions/core';
 import { context } from '@actions/github';
 
 import Client from './client';
-import { markdownToSlack, trimToWords } from './utils/string';
+import { markdownToSlack, extractSummaryFromMarkdown } from './utils/string';
 import { GithubSlackMapping, getUsersMapping } from './utils/user-mapping';
 
 export interface PullRequest {
@@ -111,10 +111,9 @@ class GithubService {
     this.pullRequest = {
       author: pullRequest.user?.login ?? 'unknown',
       title: pullRequest.title,
-      body: trimToWords(
-        markdownToSlack(pullRequest.body ?? ''),
-        Number(Client.getInputs().maxBodyWordCount)
-      ),
+      body: Client.getInputs().extractBodySummary
+        ? markdownToSlack(extractSummaryFromMarkdown(pullRequest.body ?? ''))
+        : markdownToSlack(pullRequest.body ?? ''),
       href: pullRequest?.html_url,
       number: Number(pullRequest?.number),
       owner: context.repo.owner,

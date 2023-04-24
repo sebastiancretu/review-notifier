@@ -11,7 +11,7 @@ interface Inputs {
   readonly slackChannelId: string;
   readonly githubToken: string;
 
-  readonly maxBodyWordCount: string | number;
+  readonly extractBodySummary: boolean;
 
   readonly ignoreLabels: string[];
 }
@@ -71,12 +71,10 @@ class Client implements IClient {
       githubToken: core.getInput('github-token', {
         required: true,
       }),
-      maxBodyWordCount:
-        Number(
-          core.getInput('slack-message-max-words-count', {
-            required: false,
-          })
-        ) ?? 250,
+      extractBodySummary:
+        core.getBooleanInput('extract-body-summary', {
+          required: false,
+        }) ?? false,
       ignoreLabels:
         core
           .getInput('ignore-labels', {
