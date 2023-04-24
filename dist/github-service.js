@@ -96,7 +96,6 @@ class GithubService {
             key: awsObjectKey,
             region: awsRegion,
         });
-        console.log(JSON.stringify(github_1.context));
         this.pullRequest = {
             author: pullRequest.user?.login ?? 'unknown',
             title: pullRequest.title,

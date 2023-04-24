@@ -1,3 +1,15 @@
+## [1.0.11](https://github.com/sebastiancretu/review-notifier/compare/v1.0.10...v1.0.11) (2023-04-24)
+
+
+### Bug Fixes
+
+* remove console.log ([c01b8c4](https://github.com/sebastiancretu/review-notifier/commit/c01b8c46786c1fe55d5819c7530440dc33d5cde1))
+
+
+### Refactors
+
+* code ([58c9be5](https://github.com/sebastiancretu/review-notifier/commit/58c9be5988fac848ec6db397b7e4661d26e0f2c8))
+
 ## [1.0.10](https://github.com/sebastiancretu/review-notifier/compare/v1.0.9...v1.0.10) (2023-04-24)
 
 

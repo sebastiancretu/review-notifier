@@ -76231,7 +76231,6 @@ class GithubService {
             key: awsObjectKey,
             region: awsRegion,
         });
-        console.log(JSON.stringify(github_1.context));
         this.pullRequest = {
             author: pullRequest.user?.login ?? 'unknown',
             title: pullRequest.title,
@@ -76385,8 +76384,8 @@ const onPullRequestReview = async () => {
         });
     }
     const slackMessageText = review.state === 'changes_requested'
-        ? `${formattedText} has **requested changes**. Please review.`
-        : `${formattedText} **approved** your Pull Request.`;
+        ? `${formattedText} has *requested changes*. Please review.`
+        : `${formattedText} *approved* your Pull Request.`;
     await slack_message_1.SlackMessage.addComment({
         text: slackMessageText,
     });
@@ -76418,23 +76417,27 @@ async function run() {
     const ignoreLabels = client_1.default.getInputs().ignoreLabels;
     const hasQuietLabel = pullRequest.labels.some((label) => ignoreLabels.includes(label));
     const isWip = pullRequest.action === 'draft' && ignoreDraft;
-    if (isWip || hasQuietLabel)
+    if (isWip || hasQuietLabel) {
         return;
+    }
     if (!slackMessageId) {
         const sentNewPullRequestMessage = await slack_message_1.SlackMessage.newPullRequest();
         await github_service_1.default.addSlackTsComment(sentNewPullRequestMessage);
     }
-    if (eventName === 'pull_request_review') {
-        await (0, handlers_1.onPullRequestReview)();
-        return;
-    }
-    if (eventName === 'push') {
-        if (github_service_1.default.isActionOnBaseBranch()) {
-            await (0, handlers_1.onMerge)();
-            return;
-        }
-        await (0, handlers_1.onPush)();
-        return;
+    switch (eventName) {
+        case 'pull_request_review':
+            await (0, handlers_1.onPullRequestReview)();
+            break;
+        case 'push':
+            if (github_service_1.default.isActionOnBaseBranch()) {
+                await (0, handlers_1.onMerge)();
+            }
+            else {
+                await (0, handlers_1.onPush)();
+            }
+            break;
+        default:
+            break;
     }
 }
 run();
