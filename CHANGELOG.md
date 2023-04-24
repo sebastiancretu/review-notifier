@@ -1,3 +1,25 @@
+## 1.0.0 (2023-04-24)
+
+
+### Bug Fixes
+
+* added methdos ([93304ab](https://github.com/sebastiancretu/review-notifier/commit/93304ab4c4e8363f1062327d156e2df01b31ad3c))
+* added new methods ([06a5dfb](https://github.com/sebastiancretu/review-notifier/commit/06a5dfb7a119d0198dc3292a1651dec2b070e601))
+* **deps:** bump @aws-sdk/client-s3 from 3.309.0 to 3.310.0 ([675e30a](https://github.com/sebastiancretu/review-notifier/commit/675e30a72ed046ed2be9ef5c4f8b506a388252e5))
+* **deps:** bump @aws-sdk/client-s3 from 3.310.0 to 3.312.0 ([8b4a6b9](https://github.com/sebastiancretu/review-notifier/commit/8b4a6b9d3e398ee1e058d4d0095b93a47c7087de))
+* **deps:** bump @aws-sdk/client-s3 from 3.312.0 to 3.315.0 ([eb12a8c](https://github.com/sebastiancretu/review-notifier/commit/eb12a8c4fef67df742aab4be83afb011448e160c))
+* **deps:** bump @aws-sdk/client-s3 from 3.315.0 to 3.317.0 ([0eb3525](https://github.com/sebastiancretu/review-notifier/commit/0eb3525b00c2180736c2d029a3a8e2ff9ec5124c))
+* finished initial implementation; ([3c6e519](https://github.com/sebastiancretu/review-notifier/commit/3c6e519568aad08886c0d16d77e03023d7646ef7))
+* getBooleanInput ([7ad44e2](https://github.com/sebastiancretu/review-notifier/commit/7ad44e2abfaebf72758183480acbfa10626bfc34))
+* ignore dist ([c9e1e5f](https://github.com/sebastiancretu/review-notifier/commit/c9e1e5fe4cfe405cd37eb39859ed0ba554bad5bd))
+* ignore dist ([1bc1c57](https://github.com/sebastiancretu/review-notifier/commit/1bc1c57981b43fd657ff607a7234fc4af8f6076f))
+* initial commit ([d8dec35](https://github.com/sebastiancretu/review-notifier/commit/d8dec3507b1b6676edb7b0d4b9c78e3f54c2b74c))
+* lint errors ([60844bb](https://github.com/sebastiancretu/review-notifier/commit/60844bb0a8bff4da7276426dddc8a2a05efccb0e))
+* lint errors ([d325ee4](https://github.com/sebastiancretu/review-notifier/commit/d325ee4b2b69859e7876bb0190c26c283918efa7))
+* lint errors ([943ff91](https://github.com/sebastiancretu/review-notifier/commit/943ff9130b9d55a9b536d09956bb1395f1960afc))
+* modifications ([89e15ca](https://github.com/sebastiancretu/review-notifier/commit/89e15ca55590325f3ef8045f70fb272adc68f738))
+* modified action.yml ([4e8279a](https://github.com/sebastiancretu/review-notifier/commit/4e8279aa4d665962ce1c853c8ab425b56fa2369c))
+
 ## [1.0.4](https://github.com/sebastiancretu/bare-github-action/compare/v1.0.3...v1.0.4) (2023-04-01)
 
 
