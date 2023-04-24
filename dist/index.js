@@ -76595,12 +76595,8 @@ const trimToWords = (text, numWords, ellipsis = '...') => {
 };
 exports.trimToWords = trimToWords;
 const markdownToSlack = (markdown) => {
-    // Replace two or more consecutive spaces or tabs with a newline character
-    markdown = markdown.replace(/(\r\n|\r|\n)/g, '\n');
     // Bold
-    markdown = markdown.replace(/\*\*(.*?)\*\*/g, '_$1_');
-    // Italics
-    markdown = markdown.replace(/\*(.*?)\*/g, '*$1*');
+    markdown = markdown.replace(/\*\*(.*?)\*\*/g, '*$1*');
     // Strikethrough
     markdown = markdown.replace(/~~(.*?)~~/g, '~$1~');
     // Code blocks
@@ -76611,13 +76607,15 @@ const markdownToSlack = (markdown) => {
     markdown = markdown.replace(/\[(.*?)\]\((.*?)\)/g, '<$2|$1>');
     // Headers
     markdown = markdown.replace(/^(#+)\s*(.*?)\s*$/gm, (_, level, content) => {
-        return `\n*${content}*\n`;
+        return `*${content}*`;
     });
     // Lists
     markdown = markdown.replace(/^\s*([-*+])\s(.+)/gm, (_, bullet, content) => {
         const slackBullet = bullet === '-' ? '- ' : `${bullet} `;
-        return `${slackBullet}${content}\n`;
+        return `${slackBullet}${content}`;
     });
+    // Replace line breaks with \n characters
+    markdown = markdown.replace(/\r?\n/g, '\\n');
     return markdown.trim();
 };
 exports.markdownToSlack = markdownToSlack;
