@@ -107,7 +107,6 @@ class GithubService {
       region: awsRegion,
     });
 
-    console.log(JSON.stringify(context));
     this.pullRequest = {
       author: pullRequest.user?.login ?? 'unknown',
       title: pullRequest.title,
