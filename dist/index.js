@@ -89289,7 +89289,7 @@ class GithubService {
                 ? 'merged'
                 : pullRequest.draft
                     ? 'draft'
-                    : github_1.context.payload.event.action,
+                    : pullRequest.action,
             state: pullRequest.state,
             ref: github_1.context.ref,
             eventName: github_1.context.eventName,
