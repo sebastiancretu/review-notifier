@@ -7,12 +7,11 @@ interface Inputs {
   readonly awsRegion: string;
   readonly awsBucket: string;
   readonly awsObjectKey: string;
-  readonly baseBranch: string;
   readonly slackBotToken: string;
   readonly slackChannelId: string;
   readonly githubToken: string;
 
-  readonly numOfWords: string | number;
+  readonly maxBodyWordCount: string | number;
 
   readonly ignoreLabels: string[];
 }
@@ -63,9 +62,6 @@ class Client implements IClient {
       awsObjectKey: core.getInput('aws-s3-object-key', {
         required: true,
       }),
-      baseBranch: core.getInput('base-branch', {
-        required: true,
-      }),
       slackBotToken: core.getInput('slack-bot-token', {
         required: true,
       }),
@@ -75,10 +71,12 @@ class Client implements IClient {
       githubToken: core.getInput('github-token', {
         required: true,
       }),
-      numOfWords:
-        core.getInput('slack-message-max-words-count', {
-          required: false,
-        }) ?? 250,
+      maxBodyWordCount:
+        Number(
+          core.getInput('slack-message-max-words-count', {
+            required: false,
+          })
+        ) ?? 250,
       ignoreLabels:
         core
           .getInput('ignore-labels', {

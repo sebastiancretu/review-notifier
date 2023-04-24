@@ -1,11 +1,36 @@
-name: "Your name here"
-description: "Provide a description here"
-author: "Your name or organization here"
+name: "Review Notifier"
+description: "Description: Review Notifier is a tool that monitors pull requests in a specified GitHub repository and sends notifications to a designated Slack channel when new pull requests are created or existing ones are updated. Review Notifier can be customized to ignore draft pull requests and specific labels. The Slack notifications include a summary of the pull request changes and a link to the pull request."
+author: "Sebastian Cretu"
 inputs:
-  milliseconds: # change this
+  ignore-draft: 
     required: true
-    description: "input description here"
-    default: "default value if applicable"
+    description: "A boolean value that determines whether Review Notifier should ignore draft pull requests"
+  aws-region:
+    required: true
+    description: "The region where the AWS S3 bucket is located"
+  aws-s3-bucket:
+    required: true
+    description: "The name of the AWS S3 bucket where mapped user data is located"
+  aws-s3-object-key: 
+    required: true
+    description: 'The key of the AWS S3 object'
+  slack-bot-token:
+    required: true
+    description: 'The authentication token for the Slack bot that Review Notifier will use to send notifications.'
+  slack-channel-id:
+    required: true
+    description: 'The ID of the Slack channel where Review Notifier will send notifications.'
+  github-token:
+    required: true
+    description: 'The authentication token for the GitHub repository that Review Notifier will monitor.'
+  slack-message-max-words-count:
+    required: false
+    description: 'An optional input that specifies the maximum number of words allowed in the message body of the Slack notification. If not specified, Review Notifier will use the default value'
+    default: "250"
+  ignore-labels:
+    required: false
+    description: 'A comma-separated list of PR labels that Review Notifier should ignore'
+
 runs:
   using: "node16"
   main: "dist/index.js"

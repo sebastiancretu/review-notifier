@@ -113,7 +113,7 @@ class GithubService {
       title: pullRequest.title,
       body: trimToWords(
         slackifyMarkdown(pullRequest.body ?? ''),
-        Number(Client.getInputs().numOfWords)
+        Number(Client.getInputs().maxBodyWordCount)
       ),
       href: pullRequest?.html_url,
       number: Number(pullRequest?.number),
