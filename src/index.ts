@@ -7,7 +7,7 @@ import { SlackMessage } from './slack-message';
 
 async function run(): Promise<void> {
   const { eventName } = context;
-  console.log(JSON.stringify(context.payload));
+  console.log(JSON.stringify(context));
 
   const pullRequest = await GithubService.getPullRequest();
   const slackMessageId = await GithubService.extractSlackTs();
