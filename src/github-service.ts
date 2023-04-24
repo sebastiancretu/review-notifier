@@ -1,9 +1,8 @@
 import * as core from '@actions/core';
 import { context } from '@actions/github';
-import slackifyMarkdown from 'slackify-markdown';
 
 import Client from './client';
-import { trimToWords } from './utils/string';
+import { markdownToSlack, trimToWords } from './utils/string';
 import { GithubSlackMapping, getUsersMapping } from './utils/user-mapping';
 
 export interface PullRequest {
@@ -113,7 +112,7 @@ class GithubService {
       author: pullRequest.user?.login ?? 'unknown',
       title: pullRequest.title,
       body: trimToWords(
-        slackifyMarkdown(pullRequest.body ?? ''),
+        markdownToSlack(pullRequest.body ?? ''),
         Number(Client.getInputs().maxBodyWordCount)
       ),
       href: pullRequest?.html_url,
