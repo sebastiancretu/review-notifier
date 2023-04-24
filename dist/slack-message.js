@@ -85,7 +85,7 @@ class SlackMessage {
                     elements: [
                         {
                             type: 'mrkdwn',
-                            text: `> ${body}`,
+                            text: body,
                         },
                     ],
                 },
