@@ -1,18 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.markdownToSlack = exports.trimToWords = void 0;
-const trimToWords = (text, numWords, ellipsis = '...') => {
-    const words = text.split(/\s+/);
-    const trimmedWords = words.slice(0, numWords);
-    const trimmedText = trimmedWords.join(' ');
-    if (words.length > numWords) {
-        return trimmedText.trim() + ellipsis;
+exports.markdownToSlack = exports.extractSummaryFromMarkdown = void 0;
+const extractSummaryFromMarkdown = (markdown) => {
+    const headingIndex = markdown.search(/^#+\s/m);
+    if (headingIndex !== -1) {
+        return markdown.substring(0, headingIndex);
     }
     else {
-        return trimmedText.trim();
+        return markdown;
     }
 };
-exports.trimToWords = trimToWords;
+exports.extractSummaryFromMarkdown = extractSummaryFromMarkdown;
 const markdownToSlack = (markdown) => {
     // Bold
     markdown = markdown.replace(/\*\*(.*?)\*\*/g, '*$1*');

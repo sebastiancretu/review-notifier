@@ -76112,9 +76112,9 @@ class Client {
             githubToken: core.getInput('github-token', {
                 required: true,
             }),
-            maxBodyWordCount: Number(core.getInput('slack-message-max-words-count', {
+            extractBodySummary: core.getBooleanInput('extract-body-summary', {
                 required: false,
-            })) ?? 250,
+            }) ?? false,
             ignoreLabels: core
                 .getInput('ignore-labels', {
                 required: false,
@@ -76235,7 +76235,9 @@ class GithubService {
         this.pullRequest = {
             author: pullRequest.user?.login ?? 'unknown',
             title: pullRequest.title,
-            body: (0, string_1.trimToWords)((0, string_1.markdownToSlack)(pullRequest.body ?? ''), Number(client_1.default.getInputs().maxBodyWordCount)),
+            body: client_1.default.getInputs().extractBodySummary
+                ? (0, string_1.markdownToSlack)((0, string_1.extractSummaryFromMarkdown)(pullRequest.body ?? ''))
+                : (0, string_1.markdownToSlack)(pullRequest.body ?? ''),
             href: pullRequest?.html_url,
             number: Number(pullRequest?.number),
             owner: github_1.context.repo.owner,
@@ -76581,19 +76583,17 @@ exports.SlackMessage = SlackMessage;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.markdownToSlack = exports.trimToWords = void 0;
-const trimToWords = (text, numWords, ellipsis = '...') => {
-    const words = text.split(/\s+/);
-    const trimmedWords = words.slice(0, numWords);
-    const trimmedText = trimmedWords.join(' ');
-    if (words.length > numWords) {
-        return trimmedText.trim() + ellipsis;
+exports.markdownToSlack = exports.extractSummaryFromMarkdown = void 0;
+const extractSummaryFromMarkdown = (markdown) => {
+    const headingIndex = markdown.search(/^#+\s/m);
+    if (headingIndex !== -1) {
+        return markdown.substring(0, headingIndex);
     }
     else {
-        return trimmedText.trim();
+        return markdown;
     }
 };
-exports.trimToWords = trimToWords;
+exports.extractSummaryFromMarkdown = extractSummaryFromMarkdown;
 const markdownToSlack = (markdown) => {
     // Bold
     markdown = markdown.replace(/\*\*(.*?)\*\*/g, '*$1*');

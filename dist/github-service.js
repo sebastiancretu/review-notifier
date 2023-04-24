@@ -100,7 +100,9 @@ class GithubService {
         this.pullRequest = {
             author: pullRequest.user?.login ?? 'unknown',
             title: pullRequest.title,
-            body: (0, string_1.trimToWords)((0, string_1.markdownToSlack)(pullRequest.body ?? ''), Number(client_1.default.getInputs().maxBodyWordCount)),
+            body: client_1.default.getInputs().extractBodySummary
+                ? (0, string_1.markdownToSlack)((0, string_1.extractSummaryFromMarkdown)(pullRequest.body ?? ''))
+                : (0, string_1.markdownToSlack)(pullRequest.body ?? ''),
             href: pullRequest?.html_url,
             number: Number(pullRequest?.number),
             owner: github_1.context.repo.owner,

@@ -66,9 +66,9 @@ class Client {
             githubToken: core.getInput('github-token', {
                 required: true,
             }),
-            maxBodyWordCount: Number(core.getInput('slack-message-max-words-count', {
+            extractBodySummary: core.getBooleanInput('extract-body-summary', {
                 required: false,
-            })) ?? 250,
+            }) ?? false,
             ignoreLabels: core
                 .getInput('ignore-labels', {
                 required: false,
