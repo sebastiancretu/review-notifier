@@ -1,3 +1,10 @@
+## [1.0.10](https://github.com/sebastiancretu/review-notifier/compare/v1.0.9...v1.0.10) (2023-04-24)
+
+
+### Bug Fixes
+
+* added new condition ([3df45b7](https://github.com/sebastiancretu/review-notifier/commit/3df45b7112896cf81737a2da5292dcdc1b3a2cc7))
+
 ## [1.0.9](https://github.com/sebastiancretu/review-notifier/compare/v1.0.8...v1.0.9) (2023-04-24)
 
 
