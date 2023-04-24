@@ -38,7 +38,7 @@ export const markdownToSlack = (markdown: string): string => {
 
   // Headers
   markdown = markdown.replace(/^(#+)\s*(.*?)\s*$/gm, (_, level, content) => {
-    return `**${content}**\n`;
+    return `\n*${content}*\n`;
   });
 
   // Lists
