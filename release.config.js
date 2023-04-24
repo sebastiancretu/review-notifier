@@ -6,7 +6,7 @@ module.exports = {
       prerelease: true,
     },
   ],
-  repositoryUrl: 'https://github.com/sebastiancretu/bare-github-action',
+  repositoryUrl: 'https://github.com/sebastiancretu/review-notifier',
   plugins: [
     [
       '@semantic-release/commit-analyzer',
