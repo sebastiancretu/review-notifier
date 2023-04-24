@@ -76615,7 +76615,7 @@ const markdownToSlack = (markdown) => {
         return `${slackBullet}${content}`;
     });
     // Replace line breaks with \n characters
-    markdown = markdown.replace(/\r?\n/g, '\\n');
+    markdown = markdown.replace(/\r?\n/g, '\n');
     return markdown.trim();
 };
 exports.markdownToSlack = markdownToSlack;
