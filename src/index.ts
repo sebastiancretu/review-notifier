@@ -12,31 +12,37 @@ async function run(): Promise<void> {
   const slackMessageId = await GithubService.extractSlackTs();
   const ignoreDraft = Client.getInputs().ignoreDraft;
   const ignoreLabels = Client.getInputs().ignoreLabels;
+
   const hasQuietLabel = pullRequest.labels.some((label) =>
     ignoreLabels.includes(label)
   );
+
   const isWip = pullRequest.action === 'draft' && ignoreDraft;
 
-  if (isWip || hasQuietLabel) return;
+  if (isWip || hasQuietLabel) {
+    return;
+  }
 
   if (!slackMessageId) {
     const sentNewPullRequestMessage = await SlackMessage.newPullRequest();
     await GithubService.addSlackTsComment(sentNewPullRequestMessage);
   }
 
-  if (eventName === 'pull_request_review') {
-    await onPullRequestReview();
-    return;
-  }
+  switch (eventName) {
+    case 'pull_request_review':
+      await onPullRequestReview();
+      break;
 
-  if (eventName === 'push') {
-    if (GithubService.isActionOnBaseBranch()) {
-      await onMerge();
-      return;
-    }
+    case 'push':
+      if (GithubService.isActionOnBaseBranch()) {
+        await onMerge();
+      } else {
+        await onPush();
+      }
+      break;
 
-    await onPush();
-    return;
+    default:
+      break;
   }
 }
 

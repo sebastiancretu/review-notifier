@@ -126,8 +126,8 @@ export const onPullRequestReview = async (): Promise<void> => {
 
   const slackMessageText =
     review.state === 'changes_requested'
-      ? `${formattedText} has **requested changes**. Please review.`
-      : `${formattedText} **approved** your Pull Request.`;
+      ? `${formattedText} has *requested changes*. Please review.`
+      : `${formattedText} *approved* your Pull Request.`;
 
   await SlackMessage.addComment({
     text: slackMessageText,
