@@ -89514,6 +89514,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SlackMessage = void 0;
 const client_1 = __importDefault(__nccwpck_require__(4970));
 const github_service_1 = __importDefault(__nccwpck_require__(4891));
+const user_mapping_1 = __nccwpck_require__(41377);
 class SlackMessage {
     static async clearReactions() {
         const slackMessageId = await github_service_1.default.extractSlackTs();
@@ -89565,7 +89566,11 @@ class SlackMessage {
         }
     }
     static async newPullRequest() {
-        const { reviewers, href, title, body } = await github_service_1.default.getPullRequest();
+        const { reviewers, href, title, body, usersMapping } = await github_service_1.default.getPullRequest();
+        const slackReviewers = (0, user_mapping_1.createUsersToString)({
+            users: reviewers,
+            s3UsersMapping: usersMapping,
+        });
         const message = await client_1.default.getSlackClient().chat.postMessage({
             channel: client_1.default.getInputs().slackChannelId,
             blocks: [
@@ -89573,7 +89578,7 @@ class SlackMessage {
                     type: 'section',
                     text: {
                         type: 'mrkdwn',
-                        text: `Hi ${reviewers} :wave:`,
+                        text: `Hi ${slackReviewers} :wave:`,
                     },
                 },
                 {
@@ -89588,7 +89593,7 @@ class SlackMessage {
                     elements: [
                         {
                             type: 'mrkdwn',
-                            text: body,
+                            text: `> ${body}`,
                         },
                     ],
                 },
