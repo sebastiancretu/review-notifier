@@ -19,7 +19,7 @@
   "license": "ISC",
   "devDependencies": {
     "@aws-sdk/types": "^3.428.0",
-    "@commitlint/cli": "^17.7.2",
+    "@commitlint/cli": "^17.8.0",
     "@commitlint/config-conventional": "^17.7.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/exec": "^6.0.3",
