@@ -28,7 +28,7 @@
     "@types/node": "^20.11.17",
     "@typescript-eslint/eslint-plugin": "^7.0.1",
     "@vercel/ncc": "^0.38.1",
-    "dotenv": "^16.4.2",
+    "dotenv": "^16.4.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jest": "^27.8.0",
