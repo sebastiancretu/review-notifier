@@ -26,7 +26,7 @@
     "@semantic-release/git": "^10.0.1",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.1.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.1",
     "@vercel/ncc": "^0.38.1",
     "dotenv": "^16.4.5",
     "eslint-config-prettier": "^9.1.0",
