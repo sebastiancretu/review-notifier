@@ -18,7 +18,7 @@
   "author": "Sebastian Cretu",
   "license": "ISC",
   "devDependencies": {
-    "@aws-sdk/types": "^3.862.0",
+    "@aws-sdk/types": "^3.887.0",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@semantic-release/changelog": "^6.0.3",
